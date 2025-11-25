@@ -99,10 +99,19 @@ async def fetch_api_data(url: str, method: str = "GET", headers: Dict[str, str] 
             
             response.raise_for_status()
             
+            # Try to parse JSON if content-type suggests it
+            data = response.text
+            if response.headers.get("content-type", "").startswith("application/json"):
+                try:
+                    data = response.json()
+                except ValueError:
+                    # If JSON parsing fails, fall back to text
+                    data = response.text
+            
             return {
                 "status_code": response.status_code,
                 "url": str(response.url),
-                "data": response.json() if response.headers.get("content-type", "").startswith("application/json") else response.text
+                "data": data
             }
         except Exception as e:
             return {
@@ -116,6 +125,9 @@ async def text_analyzer(text: str) -> Dict[str, Any]:
     """
     Analyze text and return statistics.
     
+    Note: This is a basic implementation. For production use, consider
+    using NLP libraries like spaCy or NLTK for more accurate analysis.
+    
     Args:
         text: The text to analyze
         
@@ -125,13 +137,19 @@ async def text_analyzer(text: str) -> Dict[str, Any]:
     words = text.split()
     characters = len(text)
     characters_no_spaces = len(text.replace(" ", ""))
-    sentences = text.count(".") + text.count("!") + text.count("?")
+    
+    # Basic sentence counting - counts terminal punctuation marks
+    # Note: This is simplistic and may not handle abbreviations correctly
+    sentence_count = text.count(".") + text.count("!") + text.count("?")
+    # Only set to 0 if text is empty, otherwise keep the count (even if 0)
+    if not text.strip():
+        sentence_count = 0
     
     return {
         "text_length": characters,
         "characters_no_spaces": characters_no_spaces,
         "word_count": len(words),
-        "sentence_count": max(sentences, 1),
+        "sentence_count": sentence_count,
         "average_word_length": round(characters_no_spaces / max(len(words), 1), 2),
         "longest_word": max(words, key=len) if words else "",
         "shortest_word": min(words, key=len) if words else ""
