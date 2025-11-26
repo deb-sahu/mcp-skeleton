@@ -26,6 +26,11 @@ env/
 ENV/
 .venv
 
+# Poetry
+# Note: poetry.lock should be COMMITTED for reproducibility
+# Only ignore local Poetry cache
+.poetry/
+
 # IDE
 .vscode/
 .idea/

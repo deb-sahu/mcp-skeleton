@@ -2,9 +2,16 @@
 
 ## 📐 Overview
 
-MCP Skeleton is a **production-ready, generic template** for building Model Context Protocol (MCP) servers with FastMCP. The architecture provides complete separation between the MCP server layer and your business logic, making it a true "plug-and-play" skeleton for any domain.
+This document provides technical architecture details for the MCP Skeleton template. For usage instructions, see [README.md](README.md).
 
 **🎯 Key Principle**: This is a **SKELETON/TEMPLATE** - NOT a production application. The included tools (calculator, weather, HTTP, text) are **demonstration examples only**. You should replace them with your own domain-specific business logic while keeping the robust server infrastructure unchanged.
+
+**Architecture Principle**: Complete separation between MCP server infrastructure (generic, reusable) and business logic (domain-specific, replaceable).
+
+**Three-Layer Design**:
+1. **Server Layer** (`mcp_server.py`) - Generic MCP protocol handling
+2. **Business Logic** (`tools/`) - Your domain-specific implementations
+3. **Utilities** (`utilities/`) - Shared configuration and helpers
 
 **🔄 Use This Template For**:
 - Database query interfaces
@@ -121,7 +128,7 @@ mcp-skeleton/
 ### Request Flow (stdio mode)
 
 ```
-1. MCP Client (e.g., Cursor)
+1. MCP Client (e.g., Cursor, VSCode Co-Pilot)
    ↓
 2. Send tool request via stdio
    ↓

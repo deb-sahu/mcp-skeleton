@@ -1,7 +1,7 @@
-# MCP Skeleton - Universal MCP Server Template
+# MCP Skeleton - MCP Server Template (Python)
 
 > **🎯 This is a SKELETON/TEMPLATE for building MCP servers - NOT a production application!**  
-> Replace the example tools with your own business logic while keeping the production-ready infrastructure.
+> MCP Skeleton is a **generic template** for building Model Context Protocol (MCP) servers with FastMCP. The architecture provides complete separation between the MCP server layer and your business logic, making it a true "plug-and-play" skeleton for any domain.
 
 **Enterprise-grade Model Context Protocol (MCP) server template** built with FastMCP. Provides a battle-tested, modular architecture for building production-ready MCP servers with dual transport modes (stdio + HTTP/SSE) and full Kubernetes/AKS deployment support.
 
