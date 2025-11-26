@@ -4,7 +4,60 @@
 
 MCP Skeleton is a **generic template** for building Model Context Protocol (MCP) servers with FastMCP. The architecture provides complete separation between the MCP server layer and your business logic, making it a true "plug-and-play" skeleton for any domain.
 
-**Enterprise-grade Model Context Protocol (MCP) server template** built with FastMCP. Provides a battle-tested, modular architecture for building production-ready MCP servers with dual transport modes (stdio + HTTP/SSE) and full Kubernetes/AKS deployment support.
+Provides a modular architecture for building production-ready MCP servers with dual transport modes (stdio + HTTP/SSE) and full Kubernetes/AKS deployment support.
+
+## ✨ Key Features
+
+- **Clean Structure** – Flat file organization with clear separation of concerns
+- **Dual Transport** – Supports both stdio (IDE integration) and HTTP/SSE (deployment)
+- **Structured Responses** – Consistent JSON responses across all tools
+- **Type Safe** – Pydantic models for request/response validation
+- **Example Tools** – Calculator and weather services as reference implementations
+- **Production Ready** – Includes Docker setup and configuration management
+
+---
+
+## 🏗️ Project Structure
+
+```
+mcp-skeleton/
+├── mcp_server.py              # Main MCP server with tool registrations
+│
+├── tools/                      # Business Logic Layer ⚠️ REPLACE WITH YOUR OWN
+│   ├── __init__.py            # Package exports (required)
+│   ├── calculator_tools.py    # 📚 EXAMPLE Tool 1: Math operations (replace)
+│   ├── weather_tools.py       # 📚 EXAMPLE Tool 2: Weather data (replace)
+│   ├── http_tools.py          # 📚 EXAMPLE Tool 3: API integration (replace)
+│   ├── text_tools.py          # 📚 EXAMPLE Tool 4: Text processing (replace)
+│   └── your_tool.py           # ✨ YOUR Tool 5+: Custom business logic
+│
+├── utilities/                  # Shared Utilities (Keep as-is or extend)
+│   ├── __init__.py            # Package exports (required)
+│   ├── config.py              # Configuration management
+│   └── base_tools.py          # Base classes for consistent responses
+│
+├── tests/                      # Test Cases ⚠️ REPLACE WITH YOUR OWN
+│   ├── __init__.py            # Test package initialization
+│   ├── conftest.py            # Pytest fixtures and configuration
+│   ├── test_calculator_tools.py  # 📚 EXAMPLE: Calculator tests (replace)
+│   ├── test_weather_tools.py     # 📚 EXAMPLE: Weather tests (replace)
+│   ├── test_text_tools.py        # 📚 EXAMPLE: Text analysis tests (replace)
+│   └── test_your_tools.py        # ✨ YOUR tests for your tools
+│
+├── pyproject.toml             # Poetry dependencies
+├── poetry.lock                # Locked dependencies (commit this!)
+├── Dockerfile                 # Production container image
+├── entrypoint.sh              # Container entrypoint
+├── .env.example               # Environment configuration template
+├── ARCHITECTURE.md            # System architecture documentation
+└── README.md                  # User guide and quick reference
+```
+
+> **Note**: 
+> - `__init__.py` files are required for Python to recognize directories as packages
+> - 📚 EXAMPLE files are demonstrations - replace with your own implementations
+> - ✨ YOUR files represent what you should create for your domain
+> - Run tests with `poetry run pytest`
 
 ## 🚀 What This Template Provides
 
@@ -34,31 +87,6 @@ MCP Skeleton is a **generic template** for building Model Context Protocol (MCP)
 
 **Keep:** Server infrastructure, Docker, Kubernetes configs, utilities  
 **Replace:** Everything in `tools/` directory with your business logic
-
-## 🏗️ Project Structure
-
-```
-mcp-skeleton/
-├── mcp_server.py          # Main MCP server with tool registrations
-├── tools/                 # Tool implementations (modular)
-│   ├── __init__.py       # Package exports (required)
-│   ├── calculator_tools.py  # Mathematical operations
-│   ├── weather_tools.py     # Weather data (mock)
-│   ├── http_tools.py        # HTTP API requests
-│   └── text_tools.py        # Text analysis utilities
-├── utilities/             # Configuration and utilities
-│   ├── __init__.py       # Package exports (required)
-│   ├── config.py         # Pydantic settings
-│   └── base_tools.py     # Base classes
-├── pyproject.toml        # Poetry dependencies
-├── Dockerfile            # Production container
-├── entrypoint.sh         # Container entrypoint
-├── .env.example          # Configuration template
-├── ARCHITECTURE.md       # System architecture documentation
-└── README.md            # This file
-```
-
-> **Note**: `__init__.py` files are required for Python to recognize directories as packages and enable clean imports like `from tools import calculate_operation`.
 
 ## 📋 Template Features
 
@@ -420,18 +448,32 @@ poetry run mypy mcp_server.py tools utilities
 poetry run black . && poetry run ruff check . && poetry run mypy mcp_server.py tools utilities
 ```
 
-### Testing (when implemented)
+### Testing
+
+Example tests are provided in the `tests/` directory showing patterns for testing async functions.
 
 ```bash
-# Run tests
+# Run all tests
 poetry run pytest
+
+# Run with verbose output
+poetry run pytest -v
 
 # Run with coverage
 poetry run pytest --cov=tools --cov=utilities
 
 # Run specific test file
-poetry run pytest tests/test_calculator.py
+poetry run pytest tests/test_calculator_tools.py
+
+# Run tests matching a pattern
+poetry run pytest -k "calculator"
 ```
+
+**Replace example tests with your own:**
+- `test_calculator_tools.py` → tests for your business logic
+- `test_weather_tools.py` → tests for your API integrations
+- `test_text_tools.py` → tests for your data processing
+- Add `conftest.py` fixtures for your specific needs
 
 ## 🐳 Docker Production
 
@@ -651,6 +693,8 @@ Before using this template for your project:
 - [ ] Update tool registrations in `mcp_server.py`
 - [ ] Update MCP server instructions in `mcp_server.py`
 - [ ] Add your custom configuration to `utilities/config.py`
+- [ ] Write tests for your tools in `tests/`
+- [ ] Run tests to verify: `poetry run pytest`
 - [ ] Update this README.md with your project details
 - [ ] Test locally with `poetry run python mcp_server.py`
 - [ ] Build and test Docker image

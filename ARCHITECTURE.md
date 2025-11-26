@@ -22,33 +22,6 @@ This document provides technical architecture details for the MCP Skeleton templ
 - Custom enterprise integrations
 - Any domain-specific MCP server
 
-## 🏗️ Project Structure
-
-```
-mcp-skeleton/
-├── mcp_server.py              # Main MCP server with tool registrations
-│
-├── tools/                      # Business Logic Layer ⚠️ REPLACE WITH YOUR OWN
-│   ├── __init__.py            # Package exports (required)
-│   ├── calculator_tools.py    # 📚 EXAMPLE Tool 1: Math operations (replace)
-│   ├── weather_tools.py       # 📚 EXAMPLE Tool 2: Weather data (replace)
-│   ├── http_tools.py          # 📚 EXAMPLE Tool 3: API integration (replace)
-│   ├── text_tools.py          # 📚 EXAMPLE Tool 4: Text processing (replace)
-│   └── your_tool.py           # ✨ YOUR Tool 5+: Custom business logic
-│
-├── utilities/                  # Shared Utilities (Keep as-is or extend)
-│   ├── __init__.py            # Package exports (required)
-│   ├── config.py              # Configuration management
-│   └── base_tools.py          # Base classes for consistent responses
-│
-├── pyproject.toml             # Poetry dependencies
-├── poetry.lock                # Locked dependencies
-├── Dockerfile                 # Production container image
-├── entrypoint.sh              # Container entrypoint
-├── .env.example               # Environment configuration template
-├── ARCHITECTURE.md            # System architecture documentation
-└── README.md                  # User guide and quick reference
-```
 
 ## 🎯 Architecture Diagram
 
@@ -751,7 +724,67 @@ curl http://localhost:8000/sse
 ┌─────────────▼───────────────────┐
 │         Unit Tests              │
 │   (Individual tool functions)   │
+│   Located in: tests/ directory  │
 └─────────────────────────────────┘
+```
+
+### Test Organization
+
+```
+tests/
+├── __init__.py                    # Test package initialization
+├── conftest.py                    # Shared fixtures and configuration
+├── test_calculator_tools.py       # Example: Unit tests for calculator
+├── test_weather_tools.py          # Example: Unit tests for weather API
+├── test_text_tools.py             # Example: Unit tests for text processing
+└── test_your_tools.py             # Your tool tests
+
+Test Patterns:
+- Use pytest for all tests
+- Use pytest-asyncio for async function testing
+- Mock external dependencies (APIs, databases)
+- Test both success and error cases
+- Use fixtures for common test data
+```
+
+### Example Test Structure
+
+```python
+# tests/test_your_tools.py
+import pytest
+from tools.your_tools import your_business_function
+
+@pytest.mark.asyncio
+async def test_your_function_success():
+    """Test successful execution."""
+    result = await your_business_function("input")
+    assert result["status"] == "success"
+    assert "result" in result
+
+@pytest.mark.asyncio
+async def test_your_function_error():
+    """Test error handling."""
+    with pytest.raises(ValueError):
+        await your_business_function("invalid")
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+poetry run pytest
+
+# Run with coverage
+poetry run pytest --cov=tools --cov=utilities --cov-report=html
+
+# Run specific test file
+poetry run pytest tests/test_calculator_tools.py
+
+# Run tests matching pattern
+poetry run pytest -k "calculator"
+
+# Verbose output
+poetry run pytest -v
 ```
 
 ## 🚀 CI/CD Pipeline
